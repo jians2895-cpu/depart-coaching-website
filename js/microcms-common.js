@@ -1,0 +1,5 @@
+
+function mcDate(value){if(!value)return '';return new Intl.DateTimeFormat('ja-JP',{year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(value));}
+function mcEsc(value=''){return String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+async function mcFetch(path=''){const r=await fetch('/.netlify/functions/blogs'+(path.startsWith('/') ? '?id='+encodeURIComponent(decodeURIComponent(path.slice(1))) : path),{headers:{'Accept':'application/json'}});if(!r.ok)throw new Error(`Blog API error: ${r.status}`);return r.json();}
+function mcCard(a,prefix=''){const img=a.eyecatch?.url?`<img class="blog-card-image" src="${mcEsc(a.eyecatch.url)}" alt="" loading="lazy">`:'';const cat=a.category?.name?`<span class="blog-category">${mcEsc(a.category.name)}</span>`:'';return `<article class="blog-card"><a href="${prefix}article.html?id=${encodeURIComponent(a.id)}">${img}<div class="blog-card-body"><div class="blog-meta">${cat}<time datetime="${mcEsc(a.publishedAt||'')}">${mcDate(a.publishedAt)}</time></div><h3>${mcEsc(a.title)}</h3></div></a></article>`;}
